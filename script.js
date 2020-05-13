@@ -1,43 +1,50 @@
-$(document).ready(function() {
-    function buildQueryURL() {
-    
-        const baseUrl = "http://api.openweathermap.org/data/2.5/forecast?appid=9c1480bb07587e3a3255beba58c2b60d"
-    
-        const cityEl = $("#cityID");
-        console.log(cityEl.val());
-    
-        const cityToSearch = "&q=" +'orlando'
-    
-        const finalUlr = baseUrl + cityToSearch;
-        
-        console.log(finalUlr);
+$(document).ready(function () {
+  function buildQueryURL() {
 
-        $.ajax({
-            url: finalUlr,
-            method: "GET"
-          }).then(function(response) {
+    const baseUrl = "http://api.openweathermap.org/data/2.5/forecast?appid=9c1480bb07587e3a3255beba58c2b60d"
 
-            for (var i = 0; i < response.list.length; i++) {
-                //console.log(response.list[i])
-                console.log(response.list[i].main);
-                console.log(response.list[i].weather);
-                console.log(response.list[i].wind);  
+    const cityEl = $("#cityID")
+      .val()
+      .trim();
 
-            }
-            const cityEl = $("<city>");
-            $("<city>").text("city: ", cityEl);
-            $(cityEl).append(".city");
-            console.log(cityEl);
+    const cityToSearch = "&q=" + cityEl;
 
-            const dateEl = $("<date>");
-            $("<date>").text("date: ", response.list[i]);
-            
+    const finalUlr = baseUrl + cityToSearch;
 
-            $(".temp").text("temp: ", response.list[i]);
-            $(".wind").text("wind speed: ", response.list[i]);
-              
-          });
-    }
-    
-    buildQueryURL()
+    console.log(finalUlr);
+
+    $.ajax({
+      url: finalUlr,
+      method: "GET"
+    }).then(function (response) {
+
+      const res = response.list;
+
+      for (var i = 0; i < res.length; i++) {
+        //console.log(response.list[i])
+        console.log("TEMP", res[i].main.temp);
+        console.log("HUMIDITY", res[i].main.humidity);
+        console.log("WIND", res[i].wind.speed);
+
+        const cityEl = $("<h2>").text("city: " + cityID);
+        $(".weatherCards").append(cityEl);
+
+        const dateEl = $("<h3>").text("date: " + res[i].dt_txt);
+        $(".weatherCards").append(dateEl);
+
+        const tempEl = $("<h4>").text("temp: " + res[i].main.temp);
+        $(".weatherCards").append(tempEl);
+
+        const windEl = $("<p>").text("wind speed: " + res[i].wind.speed);
+        $(".weatherCards").append(windEl);
+      }
+
+    });
+  }
+
+  $("#searchCity").on("click", function (event) {
+    event.preventDefault();
+
+    buildQueryURL();
+  })
 });
