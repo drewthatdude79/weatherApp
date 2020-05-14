@@ -3,11 +3,11 @@ $(document).ready(function () {
 
     const baseUrl = "http://api.openweathermap.org/data/2.5/forecast?appid=9c1480bb07587e3a3255beba58c2b60d"
 
-    const cityEl = $("#cityID")
+    const cityInput = $("#cityID")
       .val()
       .trim();
 
-    const cityToSearch = "&q=" + cityEl;
+    const cityToSearch = "&q=" + cityInput;
 
     const finalUlr = baseUrl + cityToSearch;
 
@@ -19,6 +19,7 @@ $(document).ready(function () {
     }).then(function (response) {
 
       const res = response.list;
+      const cityID = "";
 
       for (var i = 0; i < res.length; i++) {
         //console.log(response.list[i])
